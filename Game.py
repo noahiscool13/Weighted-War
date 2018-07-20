@@ -25,8 +25,8 @@ class Game:
     except IndexError:
       return self.end_game()
 
-    p1card = self.p1.play(current,1)
-    p2card = self.p2.play(current,2)
+    p1card = self.p1.move(current,1)
+    p2card = self.p2.move(current,2)
 
     self.p_1_cards.remove(p1card)
     self.p_2_cards.remove(p2card)
@@ -66,6 +66,9 @@ class Game:
 class Player:
     def __init__(self, tournament):
         self.tournament = tournament
+
+    def move(self):
+      raise NotImplementedError
 
     def current_game(self):
         return self.tournament.getCurrent()
