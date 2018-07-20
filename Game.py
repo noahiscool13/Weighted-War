@@ -67,7 +67,7 @@ class Player:
     def __init__(self, tournament):
         self.tournament = tournament
 
-    def move(self):
+    def move(self, current, player):
       raise NotImplementedError
 
     def current_game(self):
