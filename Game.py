@@ -17,7 +17,6 @@ class Game:
 
   def turn(self,again=[]):
 
-
     try:
       current = again + [random.choice(self.middle_cards)]
       self.middle_cards.remove(current[-1])
@@ -26,9 +25,6 @@ class Game:
 
     p1card = self.p1.move(current,1)
     p2card = self.p2.move(current,2)
-
-    print("player 1 played card {}".format(p1card))
-    print("player 2 played card {}".format(p2card))
 
     if self.can_play(1,p1card): 
       if self.can_play(2,p2card):
@@ -41,16 +37,14 @@ class Game:
         else:
           self.p2score += sum(current)
       else:
-        print("p2 made an illegal move. game terminated")
         self.p2score = -1
         self.end_game()
     else:
-      print("p1 made an illegal move. game terminated")
       self.p1score = -1
       self.end_game()
 
   def end_game(self):
-    self.winner = 1 if self.p1score > self.p1score else 2
+    self.winner = 1 if self.p1score > self.p2score else 2
     self.winner = 0 if self.p1score == self.p2score else self.winner
 
     self.terminated = True
@@ -62,33 +56,53 @@ class Game:
     return cardnum in self.p_2_cards
 
 class Player:
-    def __init__(self, tournament):
+    def register_tournament(self,tournament):
         self.tournament = tournament
 
     def move(self, current, player):
       raise NotImplementedError
 
     def current_game(self):
-        return self.tournament.current
+        return self.tournament.current_game()
 
 class Tournament:
     game_list = []
 
-    def new_game(self,p1,p2):
-        self.game_list.append(Game(p1,p2))
+    def __init__(self,p1,p2):
+      self.p1 = p1
+      self.p2 = p2
 
-    @property
-    def current(self):
+      p1.register_tournament(self)
+      p2.register_tournament(self)
+
+    def new_game(self):
+       self.game_list.append(Game(self.p1,self.p2))
+
+    def current_game(self):
       return self.game_list[-1]
 
     def turn(self):
-      self.current.turn()
+      self.current_game().turn()
+
+    def playngames(self,n):
+      winnerlist = []
+
+      for i in range(n):
+        self.new_game()
+        g = self.play()
+        print(self.game_list)
+        winner = g.winner
+        p1score = g.p1score 
+        p2score = g.p2score 
+        winnerlist.append(winner)
+
+      print(winnerlist)
+
+      return max(set(winnerlist), key=winnerlist.count)
 
     def play(self):
       while True:
+        if self.current_game().terminated:
+          return self.current_game()
         self.turn()
-        print(self.current.p1score)
-        print(self.current.p2score)
-        if self.current.terminated:
-          print(self.current.winner)
-          return
+
