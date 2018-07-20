@@ -13,16 +13,16 @@ class Game:
 
   current = None
 
-  def __init__(self,p1:player,p2:player):
+  def __init__(self,p1,p2):
     self.p1 = p1
     self.p2 = p2
 
 
   def newcard(self):
-    self.current = random.choice(middle_cards)
+    self.current = random.choice(self.middle_cards)
     self.middle_cards.remove(self.current)
 
-  def playcard(self,cardnum:int)
+  def playcard(self,cardnum):
     pass
 
   def can_play(self,player,cardnum):
@@ -31,8 +31,12 @@ class Game:
     return cardnum in self.p_2_cards
 
 
-class player:
-  def play(self):
-    pass
+class Player:
+    def __init__(self, tournament):
+        self.tournament = tournament
+
+    def current_game(self):
+        return self.tournament.getCurrent()
+
 
 
