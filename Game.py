@@ -6,8 +6,7 @@ class Game:
   p_2_cards = list(range(1, 11))
   middle_cards = list(range(1, 11))
 
-  p1score = 0
-  p2score = 0
+  p1score = p2score = 0
 
   current = None
   winner = None
@@ -73,6 +72,12 @@ class Player:
 
     def current_game(self):
         return self.tournament.getCurrent()
+
+class Tournament:
+    game_list = []
+
+    def new_game(self):
+        self.game_list.append(Game())
 
 
 
