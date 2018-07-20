@@ -3,9 +3,11 @@
 from Game import *
 from AI_random import *
 
-p1 = AI()
-p2 = AI()
+t = Tournament()
 
-g = Game(p1,p2)
+p1 = AI(t)
+p2 = AI(t)
 
-g.turn()
+t.new_game(p1,p2)
+
+t.play()
