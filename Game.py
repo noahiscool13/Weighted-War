@@ -2,18 +2,20 @@ import random
 
 class Game:
 
-  p_1_cards = list(range(1, 11))
-  p_2_cards = list(range(1, 11))
-  middle_cards = list(range(1, 11))
 
-  p1score = p2score = 0
-
-  winner = None
-  terminated = False
   
   def __init__(self,p1,p2):
     self.p1 = p1
     self.p2 = p2
+
+    self.p_1_cards = list(range(1, 11))
+    self.p_2_cards = list(range(1, 11))
+    self.middle_cards = list(range(1, 11))
+
+    self.p1score = self.p2score = 0
+
+    self.winner = None
+    self.terminated = False
 
   def turn(self,again=[]):
 
@@ -49,11 +51,13 @@ class Game:
 
     self.terminated = True
 
-
   def can_play(self,player,cardnum):
     if player == 1:
       return cardnum in self.p_1_cards
     return cardnum in self.p_2_cards
+
+  def __repr__(self):
+    return "{},{}".format(object.__repr__(self),self.terminated)
 
 class Player:
     def register_tournament(self,tournament):
@@ -90,7 +94,6 @@ class Tournament:
       for i in range(n):
         self.new_game()
         g = self.play()
-        print(self.game_list)
         winner = g.winner
         p1score = g.p1score 
         p2score = g.p2score 

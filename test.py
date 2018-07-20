@@ -12,4 +12,4 @@ t = Tournament(p1,p2)
 
 
 
-print(t.playngames(2))
+print(t.playngames(100))
