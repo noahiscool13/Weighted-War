@@ -8,7 +8,6 @@ class Game:
 
   p1score = p2score = 0
 
-  current = None
   winner = None
   terminated = False
   
@@ -17,32 +16,36 @@ class Game:
     self.p2 = p2
 
   def turn(self,again=[]):
-    current = random.choice(self.middle_cards)
-    self.middle_cards.remove(current)
+
 
     try:
-      self.newcard()
+      current = again + [random.choice(self.middle_cards)]
+      self.middle_cards.remove(current[-1])
     except IndexError:
       return self.end_game()
 
     p1card = self.p1.move(current,1)
     p2card = self.p2.move(current,2)
 
-    self.p_1_cards.remove(p1card)
-    self.p_2_cards.remove(p2card)
+    print("player 1 played card {}".format(p1card))
+    print("player 2 played card {}".format(p2card))
 
     if self.can_play(1,p1card): 
       if self.can_play(2,p2card):
+        self.p_1_cards.remove(p1card)
+        self.p_2_cards.remove(p2card)
         if p1card > p2card:
-          p1score += current + sum(again)
+          self.p1score += sum(current)
         elif p1card == p2card:
-          return self.turn([current] + again)
+          return self.turn(current)
         else:
-          p2score += current + sum(again)
+          self.p2score += sum(current)
       else:
+        print("p2 made an illegal move. game terminated")
         self.p2score = -1
         self.end_game()
     else:
+      print("p1 made an illegal move. game terminated")
       self.p1score = -1
       self.end_game()
 
@@ -52,16 +55,11 @@ class Game:
 
     self.terminated = True
 
-  def newcard(self):
-    self.current = random.choice(self.middle_cards)
-    self.middle_cards.remove(self.current)
 
   def can_play(self,player,cardnum):
     if player == 1:
       return cardnum in self.p_1_cards
     return cardnum in self.p_2_cards
-
-
 
 class Player:
     def __init__(self, tournament):
@@ -71,14 +69,26 @@ class Player:
       raise NotImplementedError
 
     def current_game(self):
-        return self.tournament.getCurrent()
+        return self.tournament.current
 
 class Tournament:
     game_list = []
 
-    def new_game(self):
-        self.game_list.append(Game())
+    def new_game(self,p1,p2):
+        self.game_list.append(Game(p1,p2))
 
+    @property
+    def current(self):
+      return self.game_list[-1]
 
+    def turn(self):
+      self.current.turn()
 
-
+    def play(self):
+      while True:
+        self.turn()
+        print(self.current.p1score)
+        print(self.current.p2score)
+        if self.current.terminated:
+          print(self.current.winner)
+          return
