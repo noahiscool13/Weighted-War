@@ -10,14 +10,12 @@ class Game:
   p2score = 0
 
   current = None
-
   winner = None
   terminated = False
-
+  
   def __init__(self,p1,p2):
     self.p1 = p1
     self.p2 = p2
-
 
   def turn(self,again=[]):
     current = random.choice(self.middle_cards)
@@ -55,10 +53,23 @@ class Game:
 
     self.terminated = True
 
+  def newcard(self):
+    self.current = random.choice(self.middle_cards)
+    self.middle_cards.remove(self.current)
+
   def can_play(self,player,cardnum):
     if player == 1:
       return cardnum in self.p_1_cards
     return cardnum in self.p_2_cards
+
+
+
+class Player:
+    def __init__(self, tournament):
+        self.tournament = tournament
+
+    def current_game(self):
+        return self.tournament.getCurrent()
 
 
 
