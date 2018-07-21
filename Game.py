@@ -100,8 +100,8 @@ class Tournament:
         winnerlist.append(winner)
 
       print(winnerlist)
-
-      return max(set(winnerlist), key=winnerlist.count)
+      winner = max(set(winnerlist), key=winnerlist.count)
+      print("Winner:", winner,"-->",winnerlist.count(winner)/n*100,"%")
 
     def play(self):
       while True:
